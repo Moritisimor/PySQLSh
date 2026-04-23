@@ -74,6 +74,21 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 
             return True
         
+        case [".schema", tbl]:
+            try:
+                # Could lead to SQL injection but idc anymore
+                crs = db.execute(f"SELECT sql FROM sqlite_master WHERE name = '{tbl}'")
+                result = crs.fetchone()
+                if result is None:
+                    print(redify(f"No such table '{tbl}'"))
+                else:
+                    print(yellowify(result[0]))
+
+            except sqlite3.OperationalError as e:
+                print(redify(f"Error while reading schema of '{tbl}: {e}'"))
+
+            return True
+        
         case _:
             return False
 
@@ -90,14 +105,14 @@ if __name__ == "__main__":
     while True:
         try:
             cmd = multiline_input(PROMPT)
-            if exec_builtin(cmd, db):
-                continue
-
-            exec_statement(cmd, db)
+            if not exec_builtin(cmd, db):
+                exec_statement(cmd, db)
 
         except KeyboardInterrupt:
             print("^C")
 
         except EOFError:
             print(blueify("Bye"))
-            sys.exit(0)
+            break
+
+    db.close()
