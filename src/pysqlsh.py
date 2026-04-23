@@ -18,7 +18,7 @@ def multiline_input(prompt: str) -> str:
         if buf == "":
             line = input(prompt)
         else:
-            line = input(blueify("\t\t... "))
+            line = input(blueify("\002Continue >> \001"))
 
         buf += line.rstrip(";").strip() + " "
         if line.endswith(";"):
@@ -96,7 +96,7 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         db = sqlite3.connect(sys.argv[1])
-        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} ")
+        PROMPT = boldify(f"\002🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} \001")
     else:
         db_name = input(blueify("Enter DB Path: "))
         PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {magentaify(">>")} ")
