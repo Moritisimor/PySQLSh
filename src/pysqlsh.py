@@ -4,12 +4,12 @@ import sqlite3
 import sys
 
 # Ansi Magic
-redify = lambda x: f"\033[31m{x}\033[0m"
-blueify = lambda x: f"\033[34m{x}\033[0m"
-greenify = lambda x: f"\033[32m{x}\033[0m"
-blackify = lambda x: f"\033[30m{x}\033[0m"
-yellowify = lambda x: f"\033[33m{x}\033[0m"
-boldify = lambda x: f"\033[1m{x}\033[0m"
+redify = lambda x: f"\001\033[31m{x}\033[0m\002"
+blueify = lambda x: f"\001\033[34m{x}\033[0m\002"
+greenify = lambda x: f"\001\033[32m{x}\033[0m\002"
+magentaify = lambda x: f"\001\033[35m{x}\033[0m\002"
+yellowify = lambda x: f"\001\033[33m{x}\033[0m\002"
+boldify = lambda x: f"\001\033[1m{x}\033[0m\002"
 
 
 def multiline_input(prompt: str) -> str:
@@ -36,7 +36,7 @@ def exec_statement(stmt: str, db: sqlite3.Connection):
             print(f"{blueify("Record Nr.")} {yellowify(idx)} {greenify(i)}")
 
         if idx == 0:
-            print(blackify("Void"))
+            print(magentaify("Void"))
     except sqlite3.OperationalError as e:
         print(redify(f"Error while executing command: {e}"))
 
@@ -70,7 +70,7 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
             crs = db.execute("SELECT name, sql FROM sqlite_master")
             print(yellowify("Schema:"))
             for i in crs.fetchall():
-                print(f"{blueify("->")} {greenify(i[0])}{blackify(":")} {yellowify(i[1])}")
+                print(f"{blueify("->")} {greenify(i[0])}{magentaify(":")} {yellowify(i[1])}")
 
             return True
         
@@ -96,10 +96,10 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         db = sqlite3.connect(sys.argv[1])
-        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {blackify(">>")} ")
+        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} ")
     else:
         db_name = input(blueify("Enter DB Path: "))
-        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {blackify(">>")} ")
+        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {magentaify(">>")} ")
         db = sqlite3.connect(db_name)
 
     while True:
