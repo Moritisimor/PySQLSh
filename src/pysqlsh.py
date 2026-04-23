@@ -27,6 +27,19 @@ def exec_statement(stmt: str, db: sqlite3.Connection):
         print(redify(f"Error while executing command: {e}"))
 
 
+def multiline_input(prompt: str) -> str:
+    buf = ""
+    while True:
+        if buf == "":
+            line = input(prompt)
+        else:
+            line = input(blueify("... "))
+
+        buf += line
+        if line.endswith(";"):
+            return buf.rstrip(";")
+
+
 # exec_builtin works by trying to match cmd with a builtin, and, if found, returns True
 # The return value can be used by the caller to determine whether or not it should execute
 # cmd as a regular SQL statement.
@@ -67,7 +80,7 @@ if __name__ == "__main__":
 
     while True:
         try:
-            cmd = input(PROMPT)
+            cmd = multiline_input(PROMPT)
             if exec_builtin(cmd, db):
                 continue
 
