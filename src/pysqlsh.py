@@ -20,9 +20,10 @@ def multiline_input(prompt: str) -> str:
         else:
             line = input(blueify("\t\t... "))
 
-        buf += line + " "
+        buf += line.rstrip(";").strip() + " "
         if line.endswith(";"):
-            return buf.rstrip(";")
+            return buf.strip()
+
 
 def exec_statement(stmt: str, db: sqlite3.Connection):
     try:
