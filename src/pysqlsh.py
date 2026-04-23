@@ -9,7 +9,20 @@ blueify = lambda x: f"\033[34m{x}\033[0m"
 greenify = lambda x: f"\033[32m{x}\033[0m"
 blackify = lambda x: f"\033[30m{x}\033[0m"
 yellowify = lambda x: f"\033[33m{x}\033[0m"
+boldify = lambda x: f"\033[1m{x}\033[0m"
 
+
+def multiline_input(prompt: str) -> str:
+    buf = ""
+    while True:
+        if buf == "":
+            line = input(prompt)
+        else:
+            line = input(blueify("... "))
+
+        buf += line
+        if line.endswith(";"):
+            return buf.rstrip(";")
 
 def exec_statement(stmt: str, db: sqlite3.Connection):
     try:
@@ -25,19 +38,6 @@ def exec_statement(stmt: str, db: sqlite3.Connection):
             print(blackify("Void"))
     except sqlite3.OperationalError as e:
         print(redify(f"Error while executing command: {e}"))
-
-
-def multiline_input(prompt: str) -> str:
-    buf = ""
-    while True:
-        if buf == "":
-            line = input(prompt)
-        else:
-            line = input(blueify("... "))
-
-        buf += line
-        if line.endswith(";"):
-            return buf.rstrip(";")
 
 
 # exec_builtin works by trying to match cmd with a builtin, and, if found, returns True
@@ -72,10 +72,10 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         db = sqlite3.connect(sys.argv[1])
-        PROMPT = f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {blackify(">>")} "
+        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {blackify(">>")} ")
     else:
         db_name = input(blueify("Enter DB Path: "))
-        PROMPT = f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {blackify(">>")} "
+        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {blackify(">>")} ")
         db = sqlite3.connect(db_name)
 
     while True:
