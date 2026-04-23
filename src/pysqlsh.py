@@ -4,12 +4,12 @@ import sqlite3
 import sys
 
 # Ansi Magic
-redify = lambda x: f"\001\033[31m{x}\033[0m\002"
-blueify = lambda x: f"\001\033[34m{x}\033[0m\002"
-greenify = lambda x: f"\001\033[32m{x}\033[0m\002"
-magentaify = lambda x: f"\001\033[35m{x}\033[0m\002"
-yellowify = lambda x: f"\001\033[33m{x}\033[0m\002"
-boldify = lambda x: f"\001\033[1m{x}\033[0m\002"
+redify = lambda x: f"\001\033[31m\002{x}\001\033[0m\002"
+blueify = lambda x: f"\001\033[34m\002{x}\001\033[0m\002"
+greenify = lambda x: f"\001\033[32m\002{x}\001\033[0m\002"
+magentaify = lambda x: f"\001\033[35m\002{x}\001\033[0m\002"
+yellowify = lambda x: f"\001\033[33m\002{x}\001\033[0m\002"
+boldify = lambda x: f"\001\033[1m\002{x}\001\033[0m\002"
 
 
 def multiline_input(prompt: str) -> str:
@@ -17,8 +17,10 @@ def multiline_input(prompt: str) -> str:
     while True:
         if buf == "":
             line = input(prompt)
+            if line.strip() == "":
+                return ""
         else:
-            line = input(blueify("\002Continue >> \001"))
+            line = input(blueify("Continue >> "))
 
         buf += line.rstrip(";").strip() + " "
         if line.endswith(";"):
@@ -96,7 +98,7 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         db = sqlite3.connect(sys.argv[1])
-        PROMPT = boldify(f"\002🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} \001")
+        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} ")
     else:
         db_name = input(blueify("Enter DB Path: "))
         PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {magentaify(">>")} ")
