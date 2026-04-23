@@ -18,9 +18,9 @@ def multiline_input(prompt: str) -> str:
         if buf == "":
             line = input(prompt)
         else:
-            line = input(blueify("... "))
+            line = input(blueify("\t\t... "))
 
-        buf += line
+        buf += line + " "
         if line.endswith(";"):
             return buf.rstrip(";")
 
