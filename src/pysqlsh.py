@@ -66,6 +66,14 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 
             return True
         
+        case [".schema"]:
+            crs = db.execute("SELECT name, sql FROM sqlite_master")
+            print(yellowify("Schema:"))
+            for i in crs.fetchall():
+                print(f"{blueify("->")} {greenify(i[0])}{blackify(":")} {yellowify(i[1])}")
+
+            return True
+        
         case _:
             return False
 
