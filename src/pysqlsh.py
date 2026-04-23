@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os
 import readline
 import sqlite3
 import sys
@@ -10,6 +9,52 @@ blueify = lambda x: f"\033[34m{x}\033[0m"
 greenify = lambda x: f"\033[32m{x}\033[0m"
 blackify = lambda x: f"\033[30m{x}\033[0m"
 yellowify = lambda x: f"\033[33m{x}\033[0m"
+
+
+def exec_statement(stmt: str, db: sqlite3.Connection):
+    try:
+        crs = db.execute(stmt)
+        db.commit()
+
+        idx = 0
+        for i in crs.fetchall():
+            idx += 1
+            print(f"{blueify("Record Nr.")} {yellowify(idx)} {greenify(i)}")
+
+        if idx == 0:
+            print(blackify("Void"))
+    except sqlite3.OperationalError as e:
+        print(redify(f"Error while executing command: {e}"))
+
+
+# exec_builtin works by trying to match cmd with a builtin, and, if found, returns True
+# The return value can be used by the caller to determine whether or not it should execute
+# cmd as a regular SQL statement.
+def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
+    match cmd.split():
+        case []:
+            return True
+        
+        case [".clear"]:
+            print("\033[H\033[2J\033[3J")
+            return True
+        
+        case [".exit"]:
+            print(blueify("Bye"))
+            sys.exit(0)
+            return True
+        
+        case [".tables"]:
+            crs = db.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            print(yellowify("Tables:"))
+            for i in crs.fetchall():
+                print(f"{blueify("->")} {greenify(i[0])}")
+
+            return True
+        
+        case _:
+            return False
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -23,23 +68,14 @@ if __name__ == "__main__":
     while True:
         try:
             cmd = input(PROMPT)
-            crs = db.execute(cmd)
-            db.commit()
+            if exec_builtin(cmd, db):
+                continue
 
-            idx = 0
-            for i in crs.fetchall():
-                idx += 1
-                print(f"{blueify("Record Nr.")} {yellowify(idx)} {greenify(i)}")
-
-            if idx == 0:
-                print(blackify("Void"))
-
-        except sqlite3.OperationalError as e:
-            print(redify(f"Error while executing command: {e}"))
+            exec_statement(cmd, db)
 
         except KeyboardInterrupt:
             print("^C")
 
         except EOFError:
-            print("Bye")
+            print(blueify("Bye"))
             sys.exit(0)
