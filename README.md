@@ -17,6 +17,7 @@ To install the script, you can use pip:
 git clone https://github.com/Moritisimor/PySQLSh
 cd PySQLSh
 pip install .
+pyqsqlsh
 ```
 
 (Note: you should use pipx for this if you want to install it globally without using a virtual environment)
