@@ -53,3 +53,9 @@ To see all tables:
 
 ![All Tables](screenshots/ViewTablesScreenshot.png)
 
+PySQLSh also has some other builtins that are less spectacular.
+
+```.exit``` to exit the database. Alternatively, you can just enter Ctrl + D with an empty prompt.
+
+```.clear``` to clear the screen.
+
