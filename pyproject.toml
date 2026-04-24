@@ -1,0 +1,19 @@
+[project]
+name = "PySQLSh"
+version = "1.0.0"
+description = "A shell for interacting with SQLite databases written in Python."
+authors = [
+    {name = "Moritisimor", email = "devMoritisimor@proton.me"},
+    {name = "Kokonico", email = "kokonico@duck.com"}
+]
+readme = "README.md"
+requires-python = "^3.10"
+dependencies = [
+]
+
+[project.scripts]
+pysqlsh = "pysqlsh:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -94,8 +94,7 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
         case _:
             return False
 
-
-if __name__ == "__main__":
+def main():
     if len(sys.argv) > 1:
         db = sqlite3.connect(sys.argv[1])
         PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} ")
@@ -118,3 +117,6 @@ if __name__ == "__main__":
             break
 
     db.close()
+
+if __name__ == "__main__":
+    main()

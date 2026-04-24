@@ -2,7 +2,7 @@
 A shell for interacting with SQLite databases written in Python
 
 ## How do I use it?
-### Cloning and launching
+### Cloning and launching/installing
 To clone this repository and launch the python script:
 
 ```bash
@@ -10,6 +10,16 @@ git clone https://github.com/Moritisimor/PySQLSh
 cd PySQLSh
 python pysqlsh.py
 ```
+
+To install the script, you can use pip:
+
+```bash
+git clone https://github.com/Moritisimor/PySQLSh
+cd PySQLSh
+pip install .
+```
+
+(Note: you should use pipx for this if you want to install it globally without using a virtual environment)
 
 You should then be prompted to enter the path to a SQLite database. 
 
