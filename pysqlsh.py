@@ -20,7 +20,7 @@ def multiline_input(prompt: str) -> str:
             if line.strip() == "":
                 return ""
         else:
-            line = input(blueify("Continue >> "))
+            line = input(f"{blueify("Continue")} {magentaify(">>")} ")
 
         buf += line.rstrip(";").strip() + " "
         if line.endswith(";"):
