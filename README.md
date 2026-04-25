@@ -64,6 +64,10 @@ To see all tables:
 
 ![All Tables](screenshots/ViewTablesScreenshot.png)
 
+To execute a SQL script:
+
+![Executing a SQL script](screenshots/ExecuteScriptScreenshot.png)
+
 PySQLSh also has some other builtins that are less spectacular.
 
 ```.exit``` to exit the database. Alternatively, you can just enter Ctrl + D with an empty prompt.
