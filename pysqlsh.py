@@ -62,16 +62,26 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
         case [".tables"]:
             crs = db.execute("SELECT name FROM sqlite_master WHERE type='table'")
             print(yellowify("Tables:"))
+            hasTables = False
             for i in crs.fetchall():
+                hasTables = True
                 print(f"{blueify("->")} {greenify(i[0])}")
+                
+            if not hasTables:
+                print(redify("No tables"))
 
             return True
         
         case [".schema"]:
             crs = db.execute("SELECT name, sql FROM sqlite_master")
             print(yellowify("Schema:"))
+            hasTables = False
             for i in crs.fetchall():
+                hasTables = True
                 print(f"{blueify("->")} {greenify(i[0])}{magentaify(":")} {yellowify(i[1])}")
+            
+            if not hasTables:
+                print(redify("No tables"))
 
             return True
         
