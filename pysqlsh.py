@@ -106,6 +106,7 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
                 with open(file_name) as f:
                     content = f.read()
                     db.executescript(content)
+                    print(greenify(f"Successfully executed SQL Script {file_name}"))
 
             except sqlite3.OperationalError as e:
                 print(redify(f"Error while executing SQL script: {e}"))
@@ -113,7 +114,6 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
             except FileNotFoundError:
                 print(redify(f"Could not find file: {file_name}"))
 
-            print(greenify(f"Successfully executed SQL Script {file_name}"))
             return True
 
         
