@@ -114,8 +114,9 @@ def main():
         except EOFError:
             print(blueify("Bye"))
             break
-
-    db.close()
+        
+        finally:
+            db.close()
 
 if __name__ == "__main__":
     main()
