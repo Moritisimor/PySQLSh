@@ -2,6 +2,7 @@
 import readline
 import sqlite3
 import sys
+import os
 
 # Ansi Magic
 redify = lambda x: f"\001\033[31m\002{x}\001\033[0m\002"
@@ -66,7 +67,7 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
             for i in crs.fetchall():
                 hasTables = True
                 print(f"{blueify("->")} {greenify(i[0])}")
-                
+
             if not hasTables:
                 print(redify("No tables"))
 
@@ -128,6 +129,15 @@ def main():
         PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {magentaify(">>")} ")
         db = sqlite3.connect(db_name)
 
+    histfile = os.path.join(os.path.expanduser("~"), ".pysqlsh_history")
+    try:
+        readline.read_history_file(histfile)
+    except FileNotFoundError:
+        readline.write_history_file(histfile)
+        print(greenify(f"Created history file at {histfile}."))
+    finally:
+        readline.set_history_length(1000)
+
     while True:
         try:
             cmd = multiline_input(PROMPT)
@@ -140,7 +150,9 @@ def main():
         except EOFError:
             print(blueify("Bye"))
             break
-        
+
+        finally:
+            readline.write_history_file(histfile)
         
     db.close()
 
