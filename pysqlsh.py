@@ -47,7 +47,7 @@ def exec_statement(stmt: str, db: sqlite3.Connection):
 # The return value can be used by the caller to determine whether or not it should execute
 # cmd as a regular SQL statement.
 def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
-    match cmd.lower().split():
+    match cmd.split():
         case []:
             return True
         
@@ -58,7 +58,6 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
         case [".exit"]:
             print(blueify("Bye"))
             sys.exit(0)
-            return True
         
         case [".tables"]:
             crs = db.execute("SELECT name FROM sqlite_master WHERE type='table'")
