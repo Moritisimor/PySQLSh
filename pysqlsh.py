@@ -90,6 +90,22 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 
             return True
         
+        case [".sql", file_name]:
+            try:
+                with open(file_name) as f:
+                    content = f.read()
+                    db.executescript(content)
+
+            except sqlite3.OperationalError as e:
+                print(redify(f"Error while executing SQL script: {e}"))
+            
+            except FileNotFoundError:
+                print(redify(f"Could not find file: {file_name}"))
+
+            print(greenify(f"Successfully executed SQL Script {file_name}"))
+            return True
+
+        
         case _:
             return False
 
@@ -115,8 +131,8 @@ def main():
             print(blueify("Bye"))
             break
         
-        finally:
-            db.close()
+        
+    db.close()
 
 if __name__ == "__main__":
     main()
