@@ -208,3 +208,7 @@ __marimo__/
 
 # SQLite Related stuff
 *.db
+
+# IDEs
+.idea
+.vscode

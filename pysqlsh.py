@@ -45,7 +45,7 @@ def exec_statement(stmt: str, db: sqlite3.Connection):
 
 
 # exec_builtin works by trying to match cmd with a builtin, and, if found, returns True
-# The return value can be used by the caller to determine whether or not it should execute
+# The return value can be used by the caller to determine whether it should execute
 # cmd as a regular SQL statement.
 def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
     match cmd.split():
@@ -63,12 +63,12 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
         case [".tables"]:
             crs = db.execute("SELECT name FROM sqlite_master WHERE type='table'")
             print(yellowify("Tables:"))
-            hasTables = False
+            has_tables = False
             for i in crs.fetchall():
-                hasTables = True
+                has_tables = True
                 print(f"{blueify("->")} {greenify(i[0])}")
 
-            if not hasTables:
+            if not has_tables:
                 print(redify("No tables"))
 
             return True
@@ -76,12 +76,12 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
         case [".schema"]:
             crs = db.execute("SELECT name, sql FROM sqlite_master")
             print(yellowify("Schema:"))
-            hasTables = False
+            has_tables = False
             for i in crs.fetchall():
-                hasTables = True
+                has_tables = True
                 print(f"{blueify("->")} {greenify(i[0])}{magentaify(":")} {yellowify(i[1])}")
             
-            if not hasTables:
+            if not has_tables:
                 print(redify("No tables"))
 
             return True
@@ -123,10 +123,10 @@ def exec_builtin(cmd: str, db: sqlite3.Connection) -> bool:
 def main():
     if len(sys.argv) > 1:
         db = sqlite3.connect(sys.argv[1])
-        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} ")
+        prompt = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(sys.argv[1])} {magentaify(">>")} ")
     else:
         db_name = input(blueify("Enter DB Path: "))
-        PROMPT = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {magentaify(">>")} ")
+        prompt = boldify(f"🐍 {greenify("PySQLSh")}{yellowify("@")}{blueify(db_name)} {magentaify(">>")} ")
         db = sqlite3.connect(db_name)
 
     histfile = os.path.join(os.path.expanduser("~"), ".pysqlsh_history")
@@ -140,7 +140,7 @@ def main():
 
     while True:
         try:
-            cmd = multiline_input(PROMPT)
+            cmd = multiline_input(prompt)
             if not exec_builtin(cmd, db):
                 exec_statement(cmd, db)
 
